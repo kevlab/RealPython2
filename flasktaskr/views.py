@@ -2,6 +2,7 @@ from flask import Flask, flash, redirect, render_template, request, \
                   session, url_for, g
 from functools import wraps
 import sqlite3
+from forms import AddTaskForm
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -68,8 +69,8 @@ def new_task():
         flash('All fields are required!')
         return redirect(url_for('tasks'))
     else:
-        g.db.execute("""INSERT INTO tasks(name, due_date, priority, status
-                        values(?, ?, ?, 1), (name, date, priority)""")
+        g.db.execute("""INSERT INTO tasks(name, due_date, priority, status)
+                        values(?, ?, ?, 1)""", (name, date, priority))
         g.db.commit()
         g.db.close()
         flash('New entry was successfully posted. Thanks.')
@@ -87,7 +88,7 @@ def complete(task_id):
 
 @app.route('/delete/<int:task_id>/')
 @login_required
-def complete(task_id):
+def delete_entry(task_id):
     g.db = connect_db()
     g.db.execute("DELETE FROM tasks WHERE task_id="+str(task_id))
     g.db.commit()
