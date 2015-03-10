@@ -26,7 +26,7 @@ def logout():
     return redirect(url_for('login'))
 
 @app.route('/', methods=['GET', 'POST'])
-def login:
+def login():
     if request.method == 'POST':
         if request.form['username'] != app.config['USERNAME'] or \
            request.form['password'] != app.config['PASSWORD']:
