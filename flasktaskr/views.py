@@ -46,12 +46,12 @@ def tasks():
                           FROM tasks
                           WHERE status=1""")
     open_tasks = [dict(name=row[0], due_date=row[1], priority=row[2],
-                       task_id=row[2]) for row in cur.fetchall()]
+                       task_id=row[3]) for row in cur.fetchall()]
     cur = g.db.execute("""SELECT name, due_date, priority, task_id
                           FROM tasks
                           WHERE status=0""")
     closed_tasks = [dict(name=row[0], due_date=row[1], priority=row[2],
-                       task_id=row[2]) for row in cur.fetchall()]
+                       task_id=row[3]) for row in cur.fetchall()]
     g.db.close()
     return render_template('tasks.html', form=AddTaskForm(request.form),
                                          open_tasks=open_tasks,
@@ -62,13 +62,13 @@ def tasks():
 def new_task():
     g.db = connect_db()
     name = request.form['name']
-    date = request.form['date']
+    date = request.form['due_date']
     priority = request.form['priority']
     if not name or not date or not priority:
         flash('All fields are required!')
         return redirect(url_for('tasks'))
     else:
-        g.db.execute("""INSERT INTO tasks(name due_date, priority, status
+        g.db.execute("""INSERT INTO tasks(name, due_date, priority, status
                         values(?, ?, ?, 1), (name, date, priority)""")
         g.db.commit()
         g.db.close()
