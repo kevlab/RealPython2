@@ -74,3 +74,14 @@ def new_task():
         g.db.close()
         flash('New entry was successfully posted. Thanks.')
         return redirect(url_for('tasks'))
+
+@app.route('/complete/<int:task_id>/')
+@login_required
+def complete(task_id):
+    g.db = connect_db()
+    g.db.execute("UPDATE tasks SET status = 0 WGERE task_id="+str(task_id))
+    g.db.commit()
+    g.db.close()
+    flash('The task was marked as complete.')
+    return redirect(url_for('tasks'))
+
