@@ -6,8 +6,8 @@ from datetime import date
 db.create_all()
 
 # insert dummy data
-db.session.add(Task("Finish this tutorial", date(2014, 3, 13), 10, 1))
-db.session.add(Task("Finish Real Python course 2", date(2014, 3, 13), 10, 1))
+# db.session.add(Task("Finish this tutorial", date(2014, 3, 13), 10, 1))
+# db.session.add(Task("Finish Real Python course 2", date(2014, 3, 13), 10, 1))
 
 # commit changes
 db.session.commit()
