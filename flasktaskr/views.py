@@ -28,6 +28,7 @@ def login_required(test):
 @app.route('/logout/')
 def logout():
     session.pop('logged_in', None)
+    session.pop('user_id', None)
     flash('You are logged out. Bye.')
     return redirect(url_for('login'))
 
@@ -44,6 +45,7 @@ def login():
                 return render_template('login.html', form=form, error=error)
             else:
                 session['logged_in'] = True
+                session['user_id'] = u.id
                 flash('You are logged in.')
                 return redirect(url_for('tasks'))
         else:
@@ -65,6 +67,7 @@ def tasks():
 @app.route('/add/', methods=['POST'])
 @login_required
 def new_task():
+    error = None
     form = AddTaskForm(request.form)
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -73,11 +76,15 @@ def new_task():
                             form.priority.data,
                             datetime.datetime.utcnow(),
                             '1',
-                            '1')
+                            session['user_id'])
             db.session.add(new_task)
             db.session.commit()
             flash('New entry was successfully posted. Thanks.')
-    return redirect(url_for('tasks'))
+            return redirect(url_for('tasks'))
+        else:
+            return render_template('tasks.html', form=form, error=error)
+    if request.method == 'GET':
+        return render_template('tasks.html', form=form)
 
 @app.route('/complete/<int:task_id>/')
 @login_required
