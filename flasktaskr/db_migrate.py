@@ -17,7 +17,7 @@ with sqlite3.connect(DATABASE_PATH) as connection:
                  FROM old_tasks ORDER BY task_id ASC""")
 
     # save rows as list of tuple, set posted_date as now and user_id to 1
-    data = [(row[0], row[1], row[2], row[3], datetime.now, 1)
+    data = [(row[0], row[1], row[2], row[3], datetime.now(), 1)
             for row in c.fetchall()]
 
     c.executemany("""INSERT INTO tasks(name, due_date, priority, status,
