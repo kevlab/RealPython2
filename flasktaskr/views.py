@@ -3,6 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, \
 from functools import wraps
 from forms import AddTaskForm, RegisterForm, LoginForm
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import IntegrityError
 import datetime
 
 app = Flask(__name__)
@@ -118,12 +119,15 @@ def register():
         if form.validate_on_submit():
             new_user = User(form.name.data, form.email.data,
                             form.password.data)
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Thanks for registering. Please login.')
-            return redirect(url_for('login'))
+            try:
+                db.session.add(new_user)
+                db.session.commit()
+                flash('Thanks for registering. Please login.')
+                return redirect(url_for('login'))
+            except IntegrityError:
+                error = 'That username or email is already in use, try again!'
+                return render_template('register.html', form=form, error=error)
         else:
             return render_template('register.html', form=form, error=error)
     if request.method == 'GET':
         return render_template('register.html', form=form)
-
