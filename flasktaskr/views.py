@@ -25,6 +25,12 @@ def login_required(test):
             return redirect(url_for('login'))
     return wrap
 
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" %
+                  (getattr(form, field).label.text, error), 'error')
+
 @app.route('/logout/')
 def logout():
     session.pop('logged_in', None)
