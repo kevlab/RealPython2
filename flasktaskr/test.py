@@ -13,9 +13,9 @@ class Alltests(unittest.TestCase):
     # prior to each test.
     def setUp(self):
         app.config['TESTING'] = True
-        app.config['WTF_CSRF_ENABLED']  =True
+        app.config['WTF_CSRF_ENABLED'] = False
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-                                                os.path.join(basedir, TEST_DB)
+            os.path.join(basedir, TEST_DB)
         self.app = app.test_client()
         db.create_all()
 
@@ -23,6 +23,10 @@ class Alltests(unittest.TestCase):
     # method after each test.
     def tearDown(self):
         db.drop_all()
+
+    def login(self, name, password):
+        return self.app.post('/', data=dict(name=name, password=password),
+                             follow_redirects=True)
 
     def test_user_setup(self):
         new_user = User("klabtani", "emailad@gmail.com", "kevinlabtani")
@@ -37,6 +41,10 @@ class Alltests(unittest.TestCase):
         response = self.app.get('/')
         self.assertEquals(response.status_code, 200)
         self.assertIn('Please login to access your task list', response.data)
+
+    def test_users_cannot_login_unless_registered(self):
+        response = self.login('foo', 'bar')
+        self.assertIn('Invalid username or password', response.data)
 
 if __name__ == "__main__":
     unittest.main()
