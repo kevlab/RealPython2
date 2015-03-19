@@ -28,6 +28,11 @@ class Alltests(unittest.TestCase):
         return self.app.post('/', data=dict(name=name, password=password),
                              follow_redirects=True)
 
+    def register(self, name, email, password, confirm):
+        return self.app.post('register/', data=dict(name=name, email=email,
+                             password=password, confirm=confirm),
+                             follow_redirects=True)
+
     def test_user_setup(self):
         new_user = User("klabtani", "emailad@gmail.com", "kevinlabtani")
         db.session.add(new_user)
@@ -45,6 +50,11 @@ class Alltests(unittest.TestCase):
     def test_users_cannot_login_unless_registered(self):
         response = self.login('foo', 'bar')
         self.assertIn('Invalid username or password', response.data)
+
+    def test_user_can_login(self):
+        self.register('Michael', 'michael@email.com', 'python', 'python')
+        response = self.login('Michael', 'python')
+        self.assertIn('You are logged in.', response.data)
 
 if __name__ == "__main__":
     unittest.main()

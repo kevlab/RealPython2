@@ -6,7 +6,7 @@ import sqlite3
 with sqlite3.connect(DATABASE_PATH) as connection:
     c = connection.cursor()
 
-     # temporary rename
+    # temporary rename
     c.execute("""ALTER TABLE tasks RENAME TO old_tasks""")
 
     # recreate new table
