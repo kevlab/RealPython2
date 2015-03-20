@@ -91,5 +91,10 @@ class Alltests(unittest.TestCase):
         response = self.logout()
         self.assertIn('You are logged out. Bye.', response.data)
 
+    def test_not_logged_in_users_cannot_logout(self):
+        response = self.logout()
+        self.assertNotIn('You are logged out. Bye.', response.data)
+
+
 if __name__ == "__main__":
     unittest.main()
