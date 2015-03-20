@@ -66,6 +66,12 @@ class Alltests(unittest.TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertIn('Please register to start a task list', response.data)
 
+    def test_user_registration(self):
+        self.app.get('register/', follow_redirects=True)
+        response = self.register('Michael', 'michael@email.com', 'python',
+                                 'python')
+        self.assertIn('Thanks for registering. Please login.', response.data)
+
 
 if __name__ == "__main__":
     unittest.main()
