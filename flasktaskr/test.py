@@ -36,6 +36,18 @@ class Alltests(unittest.TestCase):
     def logout(self):
         return self.app.get('logout/', follow_redirects=True)
 
+    def create_user(self, name, email, password):
+        new_user = User(name=name, email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+
+    def create_task(self):
+        return self.app.post('add/', data=dict(name='Go buy milk',
+                             due_date='04/21/2015',
+                             priority='1',
+                             posted_date='03/21/1015',
+                             status='1'), follow_redirects=True)
+
     def test_user_setup(self):
         new_user = User("ktest", "emailad@gmail.com", "ktest")
         db.session.add(new_user)
@@ -103,9 +115,17 @@ class Alltests(unittest.TestCase):
         self.assertEquals(response.status_code, 200)
         self.assertIn('Add a new task', response.data)
 
-    def test_not_logged_in_users_can_notaccess_tasks_page(self):
+    def test_not_logged_in_users_cannot_access_tasks_page(self):
         response = self.app.get('tasks/', follow_redirects=True)
         self.assertIn('You need to login first', response.data)
+
+    def test_users_can_add_tasks(self):
+        self.create_user('testuser', 'testuser@email.com', 'python')
+        self.login('testuser', 'python')
+        self.app.get('tasks/', follow_redirects=True)
+        response = self.create_task()
+        self.assertIn('New entry was successfully posted. Thanks.',
+                      response.data)
 
 
 if __name__ == "__main__":
