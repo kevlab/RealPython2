@@ -34,13 +34,13 @@ class Alltests(unittest.TestCase):
                              follow_redirects=True)
 
     def test_user_setup(self):
-        new_user = User("klabtani", "emailad@gmail.com", "kevinlabtani")
+        new_user = User("ktest", "emailad@gmail.com", "ktest")
         db.session.add(new_user)
         db.session.commit()
         test = db.session.query(User).all()
         for t in test:
             t.name
-        assert t.name == "klabtani"
+        assert t.name == "ktest"
 
     def test_form_is_present_on_login_page(self):
         response = self.app.get('/')
@@ -58,8 +58,13 @@ class Alltests(unittest.TestCase):
 
     def test_invalid_form_data(self):
         self.register('Michael', 'michael@email.com', 'python', 'python')
-        response = self.login('alert("alert box!"")', 'foo')
+        response = self.login('alert("alert box!")', 'foo')
         self.assertIn('Invalid username or password', response.data)
+
+    def test_form_is_present_on_register_page(self):
+        response = self.app.get('register/')
+        self.assertEquals(response.status_code, 200)
+        self.assertIn('Please register to start a task list', response.data)
 
 
 if __name__ == "__main__":
