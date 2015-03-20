@@ -33,6 +33,9 @@ class Alltests(unittest.TestCase):
                              password=password, confirm=confirm),
                              follow_redirects=True)
 
+    def logout(self):
+        return self.app.get('logout/', follow_redirects=True)
+
     def test_user_setup(self):
         new_user = User("ktest", "emailad@gmail.com", "ktest")
         db.session.add(new_user)
@@ -80,6 +83,13 @@ class Alltests(unittest.TestCase):
                                  'python')
         self.assertIn('That username or email is already in use, try again!',
                       response.data)
+
+    def test_logged_in_users_can_logout(self):
+        self.register('someuser', 'someuser@email.com', 'python101',
+                      'python101')
+        self.login('someuser', 'python101')
+        response = self.logout()
+        self.assertIn('You are logged out. Bye.', response.data)
 
 if __name__ == "__main__":
     unittest.main()
