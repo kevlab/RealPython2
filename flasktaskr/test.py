@@ -138,5 +138,21 @@ class Alltests(unittest.TestCase):
                                  status='1'), follow_redirects=True)
         self.assertIn('This field is required.', response.data)
 
+    def test_users_can_update_tasks(self):
+        self.create_user('testuser', 'testuser@email.com', 'python')
+        self.login('testuser', 'python')
+        self.app.get('tasks/', follow_redirects=True)
+        self.create_task()
+        response = self.app.get("complete/1/", follow_redirects=True)
+        self.assertIn('The task was marked as complete.', response.data)
+
+    def test_users_can_delete_tasks(self):
+        self.create_user('testuser', 'testuser@email.com', 'python')
+        self.login('testuser', 'python')
+        self.app.get('tasks/', follow_redirects=True)
+        self.create_task()
+        response = self.app.get("delete/1/", follow_redirects=True)
+        self.assertIn('The task was deleted.', response.data)
+
 if __name__ == "__main__":
     unittest.main()
