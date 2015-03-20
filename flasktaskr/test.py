@@ -95,6 +95,14 @@ class Alltests(unittest.TestCase):
         response = self.logout()
         self.assertNotIn('You are logged out. Bye.', response.data)
 
+    def test_logged_in_users_can_access_tasks_page(self):
+        self.register('someuser', 'someuser@email.com', 'python101',
+                      'python101')
+        self.login('someuser', 'python101')
+        response = self.app.get('tasks/')
+        self.assertEquals(response.status_code, 200)
+        self.assertIn('Add a new task', response.data)
+
 
 if __name__ == "__main__":
     unittest.main()
