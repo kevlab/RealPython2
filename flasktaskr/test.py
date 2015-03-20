@@ -154,5 +154,17 @@ class Alltests(unittest.TestCase):
         response = self.app.get("delete/1/", follow_redirects=True)
         self.assertIn('The task was deleted.', response.data)
 
+    def test_users_cannot_complete_tasks_they_did_not_create_themselves(self):
+        self.create_user('testuser', 'testuser@email.com', 'python')
+        self.login('testuser', 'python')
+        self.app.get('tasks/', follow_redirects=True)
+        self.create_task()
+        self.logout()
+        self.create_user('testuser2', 'testuser2@email.com', 'python2')
+        self.login('testuser2', 'python2')
+        self.app.get('tasks/', follow_redirects=True)
+        response = self.app.get("complete/1/", follow_redirects=True)
+        self.assertNotIn('The task was marked as complete.', response.data)
+
 if __name__ == "__main__":
     unittest.main()
