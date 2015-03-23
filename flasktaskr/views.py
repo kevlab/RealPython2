@@ -91,8 +91,6 @@ def new_task():
             return redirect(url_for('tasks'))
         else:
             return render_template('tasks.html', form=form, error=error)
-    if request.method == 'GET':
-        return render_template('tasks.html', form=form)
 
 @app.route('/complete/<int:task_id>/')
 @login_required
