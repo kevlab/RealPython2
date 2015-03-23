@@ -71,6 +71,11 @@ class Alltests(unittest.TestCase):
         response = self.login('Michael', 'python')
         self.assertIn('You are logged in.', response.data)
 
+    def test_user_login_field_error(self):
+        self.register('Michael', 'michael@email.com', 'python', 'python')
+        response = self.login('Michael', '')
+        self.assertIn('This field is required', response.data)
+
     def test_invalid_form_data(self):
         self.register('Michael', 'michael@email.com', 'python', 'python')
         response = self.login('alert("alert box!")', 'foo')
@@ -87,7 +92,7 @@ class Alltests(unittest.TestCase):
                                  'python')
         self.assertIn('Thanks for registering. Please login.', response.data)
 
-    def test_user_registration_error(self):
+    def test_duplicate_user_registration_error(self):
         self.app.get('register/', follow_redirects=True)
         self.register('Michael', 'michael@email.com', 'python', 'python')
         self.app.get('register/', follow_redirects=True)
@@ -95,6 +100,10 @@ class Alltests(unittest.TestCase):
                                  'python')
         self.assertIn('That username or email is already in use, try again!',
                       response.data)
+
+    def test_user_registration_field_errors(self):
+        response = self.register('Michael', 'michael@email.com', 'python', '')
+        self.assertIn('This field is required', response.data)
 
     def test_logged_in_users_can_logout(self):
         self.register('someuser', 'someuser@email.com', 'python101',
