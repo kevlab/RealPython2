@@ -60,7 +60,7 @@ class Alltests(unittest.TestCase):
     def test_form_is_present_on_login_page(self):
         response = self.app.get('/')
         self.assertEquals(response.status_code, 200)
-        self.assertIn('Please login to access your task list', response.data)
+        self.assertIn('Please sign in to access your task list', response.data)
 
     def test_users_cannot_login_unless_registered(self):
         response = self.login('foo', 'bar')
