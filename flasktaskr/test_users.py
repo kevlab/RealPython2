@@ -104,5 +104,13 @@ class Alltests(unittest.TestCase):
         response = self.login('', 'python101')
         self.assertIn('This field is required', response.data)
 
+    def test_string_representation_of_the_user_object(self):
+        db.session.add(User("Johnny", "john@doe.com", "johnny"))
+        db.session.commit()
+        users = db.session.query(User).all()
+        print users
+        for user in users:
+            self.assertEqual(user.name, 'Johnny')
+
 if __name__ == "__main__":
     unittest.main()
