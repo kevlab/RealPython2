@@ -41,13 +41,6 @@ class Alltests(unittest.TestCase):
         db.session.add(new_user)
         db.session.commit()
 
-    def create_task(self):
-        return self.app.post('add/', data=dict(name='Go buy milk',
-                             due_date='04/21/2015',
-                             priority='1',
-                             posted_date='03/21/1015',
-                             status='1'), follow_redirects=True)
-
     def test_user_setup(self):
         new_user = User("ktest", "emailad@gmail.com", "ktest")
         db.session.add(new_user)
@@ -127,53 +120,6 @@ class Alltests(unittest.TestCase):
     def test_not_logged_in_users_cannot_access_tasks_page(self):
         response = self.app.get('tasks/', follow_redirects=True)
         self.assertIn('You need to login first', response.data)
-
-    def test_users_can_add_tasks(self):
-        self.create_user('testuser', 'testuser@email.com', 'python')
-        self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
-        response = self.create_task()
-        self.assertIn('New entry was successfully posted. Thanks.',
-                      response.data)
-
-    def test_users_cannot_add_tasks_when_error(self):
-        self.create_user('testuser', 'testuser@email.com', 'python')
-        self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
-        response = self.app.post('add/', data=dict(name='Go buy milk',
-                                 due_date='',
-                                 priority='1',
-                                 posted_date='03/21/1015',
-                                 status='1'), follow_redirects=True)
-        self.assertIn('This field is required.', response.data)
-
-    def test_users_can_update_tasks(self):
-        self.create_user('testuser', 'testuser@email.com', 'python')
-        self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
-        self.create_task()
-        response = self.app.get("complete/1/", follow_redirects=True)
-        self.assertIn('The task was marked as complete.', response.data)
-
-    def test_users_can_delete_tasks(self):
-        self.create_user('testuser', 'testuser@email.com', 'python')
-        self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
-        self.create_task()
-        response = self.app.get("delete/1/", follow_redirects=True)
-        self.assertIn('The task was deleted.', response.data)
-
-    def test_users_cannot_complete_tasks_they_did_not_create_themselves(self):
-        self.create_user('testuser', 'testuser@email.com', 'python')
-        self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
-        self.create_task()
-        self.logout()
-        self.create_user('testuser2', 'testuser2@email.com', 'python2')
-        self.login('testuser2', 'python2')
-        self.app.get('tasks/', follow_redirects=True)
-        response = self.app.get("complete/1/", follow_redirects=True)
-        self.assertNotIn('The task was marked as complete.', response.data)
 
 if __name__ == "__main__":
     unittest.main()
