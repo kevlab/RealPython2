@@ -39,11 +39,6 @@ class Alltests(unittest.TestCase):
     def logout(self):
         return self.app.get('logout/', follow_redirects=True)
 
-    def create_user(self):
-        new_user = User(name='Bob', email='bob@hotmail.com', password='python')
-        db.session.add(new_user)
-        db.session.commit()
-
     def test_form_is_present_on_login_page(self):
         response = self.app.get('/')
         self.assertEquals(response.status_code, 200)
