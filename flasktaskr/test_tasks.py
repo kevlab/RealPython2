@@ -47,11 +47,13 @@ class Alltests(unittest.TestCase):
         db.session.commit()
 
     def create_task(self):
-        return self.app.post('add/', data=dict(name='Go buy milk',
-                             due_date='04/21/2015',
-                             priority='1',
-                             posted_date='03/21/1015',
-                             status='1'), follow_redirects=True)
+        return self.app.post('add/',
+                             data=dict(name='Go buy milk',
+                                       due_date='04/21/2015',
+                                       priority='1',
+                                       posted_date='03/21/1015',
+                                       status='1'),
+                             follow_redirects=True)
 
     def test_logged_in_users_can_access_tasks_page(self):
         self.register()
