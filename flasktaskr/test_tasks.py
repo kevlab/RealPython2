@@ -46,6 +46,14 @@ class Alltests(unittest.TestCase):
         db.session.add(new_user)
         db.session.commit()
 
+    def create_admin_user(self):
+        new_user = User(name='Superman',
+                        email='admin@hotmail.com',
+                        password='allpowerful',
+                        role='admin')
+        db.session.add(new_user)
+        db.session.commit()
+
     def create_task(self):
         return self.app.post('add/',
                              data=dict(name='Go buy milk',
@@ -127,6 +135,32 @@ class Alltests(unittest.TestCase):
         response = self.app.get("delete/1/", follow_redirects=True)
         self.assertIn('You can only delete tasks that belong to you',
                       response.data)
+
+    def test_admin_can_complete_tasks_they_did_not_create_themselves(self):
+        self.create_user()
+        self.login('testuser', 'python')
+        self.app.get('tasks/', follow_redirects=True)
+        self.create_task()
+        self.logout()
+        self.create_admin_user()
+        self.login('Superman', 'allpowerful')
+        self.app.get('tasks/', follow_redirects=True)
+        response = self.app.get("complete/1/", follow_redirects=True)
+        self.assertNotIn('You can only update tasks that belong to you',
+                         response.data)
+
+    def test_admin_can_delete_tasks_they_did_not_create_themselves(self):
+        self.create_user()
+        self.login('testuser', 'python')
+        self.app.get('tasks/', follow_redirects=True)
+        self.create_task()
+        self.logout()
+        self.create_admin_user()
+        self.login('Superman', 'allpowerful')
+        self.app.get('tasks/', follow_redirects=True)
+        response = self.app.get("delete/1/", follow_redirects=True)
+        self.assertNotIn('You can only delete tasks that belong to you',
+                         response.data)
 
     def test_string_representation_of_the_task_object(self):
         from datetime import date
