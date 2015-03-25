@@ -113,9 +113,22 @@ class Alltests(unittest.TestCase):
         self.app.get('tasks/', follow_redirects=True)
         response = self.app.get("complete/1/", follow_redirects=True)
         self.assertIn('You can only update tasks that belong to you',
-                       response.data)
+                      response.data)
 
-    def test_string_reprsentation_of_the_task_object(self):
+    def test_users_cannot_delete_tasks_they_did_not_create_themselves(self):
+        self.create_user()
+        self.login('testuser', 'python')
+        self.app.get('tasks/', follow_redirects=True)
+        self.create_task()
+        self.logout()
+        self.register()
+        self.login('someuser', 'python101')
+        self.app.get('tasks/', follow_redirects=True)
+        response = self.app.get("delete/1/", follow_redirects=True)
+        self.assertIn('You can only delete tasks that belong to you',
+                      response.data)
+
+    def test_string_representation_of_the_task_object(self):
         from datetime import date
         db.session.add(Task("Run around in circles",
                             date(2015, 1, 22),
