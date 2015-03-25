@@ -112,7 +112,8 @@ class Alltests(unittest.TestCase):
         self.login('someuser', 'python101')
         self.app.get('tasks/', follow_redirects=True)
         response = self.app.get("complete/1/", follow_redirects=True)
-        self.assertNotIn('The task was marked as complete.', response.data)
+        self.assertIn('You can only update tasks that belong to you',
+                       response.data)
 
     def test_string_reprsentation_of_the_task_object(self):
         from datetime import date
