@@ -25,11 +25,11 @@ class Alltests(unittest.TestCase):
         db.drop_all()
 
     def login(self, name, password):
-        return self.app.post('/', data=dict(name=name, password=password),
+        return self.app.post('users/', data=dict(name=name, password=password),
                              follow_redirects=True)
 
     def register(self):
-        return self.app.post('register/',
+        return self.app.post('users/register/',
                              data=dict(name='someuser',
                                        email='someemail@gmail.com',
                                        password='python101',
@@ -37,7 +37,7 @@ class Alltests(unittest.TestCase):
                              follow_redirects=True)
 
     def logout(self):
-        return self.app.get('logout/', follow_redirects=True)
+        return self.app.get('users/logout/', follow_redirects=True)
 
     def create_user(self):
         new_user = User(name='testuser',
@@ -55,7 +55,7 @@ class Alltests(unittest.TestCase):
         db.session.commit()
 
     def create_task(self):
-        return self.app.post('add/',
+        return self.app.post('tasks/add/',
                              data=dict(name='Go buy milk',
                                        due_date='04/21/2015',
                                        priority='1',
@@ -66,18 +66,18 @@ class Alltests(unittest.TestCase):
     def test_logged_in_users_can_access_tasks_page(self):
         self.register()
         self.login('someuser', 'python101')
-        response = self.app.get('tasks/', follow_redirects=True)
+        response = self.app.get('tasks/tasks/', follow_redirects=True)
         self.assertEquals(response.status_code, 200)
         self.assertIn('Add a new task', response.data)
 
     def test_not_logged_in_users_cannot_access_tasks_page(self):
-        response = self.app.get('tasks/', follow_redirects=True)
+        response = self.app.get('tasks/tasks/', follow_redirects=True)
         self.assertIn('You need to login first', response.data)
 
     def test_users_can_add_tasks(self):
         self.create_user()
         self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
+        self.app.get('tasks/tasks/', follow_redirects=True)
         response = self.create_task()
         self.assertIn('New entry was successfully posted. Thanks.',
                       response.data)
@@ -85,8 +85,8 @@ class Alltests(unittest.TestCase):
     def test_users_cannot_add_tasks_when_error(self):
         self.create_user()
         self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
-        response = self.app.post('add/', data=dict(name='Go buy milk',
+        self.app.get('tasks/tasks/', follow_redirects=True)
+        response = self.app.post('tasks/add/', data=dict(name='Go buy milk',
                                                    due_date='',
                                                    priority='1',
                                                    posted_date='03/21/1015',
@@ -97,68 +97,68 @@ class Alltests(unittest.TestCase):
     def test_users_can_complete_tasks(self):
         self.create_user()
         self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
+        self.app.get('tasks/tasks/', follow_redirects=True)
         self.create_task()
-        response = self.app.get("complete/1/", follow_redirects=True)
+        response = self.app.get("tasks/complete/1/", follow_redirects=True)
         self.assertIn('The task was marked as complete.', response.data)
 
     def test_users_can_delete_tasks(self):
         self.create_user()
         self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
+        self.app.get('tasks/tasks/', follow_redirects=True)
         self.create_task()
-        response = self.app.get("delete/1/", follow_redirects=True)
+        response = self.app.get("tasks/delete/1/", follow_redirects=True)
         self.assertIn('The task was deleted.', response.data)
 
     def test_users_cannot_complete_tasks_they_did_not_create_themselves(self):
         self.create_user()
         self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
+        self.app.get('tasks/tasks/', follow_redirects=True)
         self.create_task()
         self.logout()
         self.register()
         self.login('someuser', 'python101')
-        self.app.get('tasks/', follow_redirects=True)
-        response = self.app.get("complete/1/", follow_redirects=True)
+        self.app.get('tasks/tasks/', follow_redirects=True)
+        response = self.app.get("tasks/complete/1/", follow_redirects=True)
         self.assertIn('You can only update tasks that belong to you',
                       response.data)
 
     def test_users_cannot_delete_tasks_they_did_not_create_themselves(self):
         self.create_user()
         self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
+        self.app.get('tasks/tasks/', follow_redirects=True)
         self.create_task()
         self.logout()
         self.register()
         self.login('someuser', 'python101')
-        self.app.get('tasks/', follow_redirects=True)
-        response = self.app.get("delete/1/", follow_redirects=True)
+        self.app.get('tasks/tasks/', follow_redirects=True)
+        response = self.app.get("tasks/delete/1/", follow_redirects=True)
         self.assertIn('You can only delete tasks that belong to you',
                       response.data)
 
     def test_admin_can_complete_tasks_they_did_not_create_themselves(self):
         self.create_user()
         self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
+        self.app.get('tasks/tasks/', follow_redirects=True)
         self.create_task()
         self.logout()
         self.create_admin_user()
         self.login('Superman', 'allpowerful')
-        self.app.get('tasks/', follow_redirects=True)
-        response = self.app.get("complete/1/", follow_redirects=True)
+        self.app.get('tasks/tasks/', follow_redirects=True)
+        response = self.app.get("tasks/complete/1/", follow_redirects=True)
         self.assertNotIn('You can only update tasks that belong to you',
                          response.data)
 
     def test_admin_can_delete_tasks_they_did_not_create_themselves(self):
         self.create_user()
         self.login('testuser', 'python')
-        self.app.get('tasks/', follow_redirects=True)
+        self.app.get('tasks/tasks/', follow_redirects=True)
         self.create_task()
         self.logout()
         self.create_admin_user()
         self.login('Superman', 'allpowerful')
-        self.app.get('tasks/', follow_redirects=True)
-        response = self.app.get("delete/1/", follow_redirects=True)
+        self.app.get('tasks/tasks/', follow_redirects=True)
+        response = self.app.get("tasks/delete/1/", follow_redirects=True)
         self.assertNotIn('You can only delete tasks that belong to you',
                          response.data)
 

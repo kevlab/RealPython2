@@ -25,11 +25,11 @@ class Alltests(unittest.TestCase):
         db.drop_all()
 
     def login(self, name, password):
-        return self.app.post('/', data=dict(name=name, password=password),
+        return self.app.post('users/', data=dict(name=name, password=password),
                              follow_redirects=True)
 
     def register(self):
-        return self.app.post('register/',
+        return self.app.post('users/register/',
                              data=dict(name='someuser',
                                        email='someemail@gmail.com',
                                        password='python101',
@@ -37,10 +37,10 @@ class Alltests(unittest.TestCase):
                              follow_redirects=True)
 
     def logout(self):
-        return self.app.get('logout/', follow_redirects=True)
+        return self.app.get('users/logout/', follow_redirects=True)
 
     def test_form_is_present_on_login_page(self):
-        response = self.app.get('/')
+        response = self.app.get('users/')
         self.assertEquals(response.status_code, 200)
         self.assertIn('Please sign in to access your task list', response.data)
 
@@ -64,7 +64,7 @@ class Alltests(unittest.TestCase):
         self.assertNotIn('You are logged out. Bye.', response.data)
 
     def test_user_registration(self):
-        self.app.get('register/', follow_redirects=True)
+        self.app.get('users/register/', follow_redirects=True)
         response = self.register()
         self.assertIn('Thanks for registering. Please login.', response.data)
 
@@ -74,7 +74,7 @@ class Alltests(unittest.TestCase):
         self.assertIn('Invalid username or password', response.data)
 
     def test_form_is_present_on_register_page(self):
-        response = self.app.get('register/')
+        response = self.app.get('users/register/')
         self.assertEquals(response.status_code, 200)
         self.assertIn('Please register to start a task list', response.data)
 
@@ -85,7 +85,7 @@ class Alltests(unittest.TestCase):
                       response.data)
 
     def test_user_registration_field_errors(self):
-        response = self.app.post('register/',
+        response = self.app.post('users/register/',
                                  data=dict(name='dude',
                                            email='dude',
                                            password='dudepassword',
