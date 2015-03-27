@@ -180,7 +180,7 @@ class Alltests(unittest.TestCase):
         self.register()
         self.login('testuser', 'python')
         response = self.app.get('tasks/tasks/', follow_redirects=True)
-        self.assertIn('test', response.data)
+        self.assertIn('testuser', response.data)
 
 if __name__ == "__main__":
     unittest.main()
