@@ -21,7 +21,8 @@ def tasks():
                       order_by(Task.due_date.asc())
     return render_template('tasks.html', form=AddTaskForm(request.form),
                                          open_tasks=open_tasks,
-                                         closed_tasks=closed_tasks)
+                                         closed_tasks=closed_tasks,
+                                         username=session['name'])
 
 @tasks_blueprint.route('/add/', methods=['GET', 'POST'])
 @login_required

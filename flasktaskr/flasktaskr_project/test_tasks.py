@@ -178,9 +178,9 @@ class Alltests(unittest.TestCase):
 
     def test_task_template_displays_logged_in_user_name(self):
         self.register()
-        self.login('testuser', 'python')
+        self.login('someuser', 'python101')
         response = self.app.get('tasks/tasks/', follow_redirects=True)
-        self.assertIn('testuser', response.data)
+        self.assertIn('someuser', response.data)
 
 if __name__ == "__main__":
     unittest.main()
