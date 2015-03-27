@@ -176,5 +176,11 @@ class Alltests(unittest.TestCase):
         for task in tasks:
             self.assertEqual(task.name, 'Run around in circles')
 
+    def test_task_template_displays_logged_in_user_name(self):
+        self.register()
+        self.login('testuser', 'python')
+        response = self.app.get('tasks/tasks/', follow_redirects=True)
+        self.assertIn('test', response.data)
+
 if __name__ == "__main__":
     unittest.main()
