@@ -182,5 +182,46 @@ class Alltests(unittest.TestCase):
         response = self.app.get('tasks/tasks/', follow_redirects=True)
         self.assertIn('someuser', response.data)
 
+    def test_users_cannot_see_links_for_tasks_they_did_not_create(self):
+        self.create_user()
+        self.login('testuser', 'python')
+        self.app.get('tasks/tasks/', follow_redirects=True)
+        self.create_task()
+        self.logout()
+        self.register()
+        response = self.login('someuser', 'python101')
+        self.app.get('tasks/tasks/', follow_redirects=True)
+        self.assertNotIn('Mark as Complete', response.data)
+        self.assertNotIn('Delete', response.data)
+
+    def test_users_can_see_links_for_tasks_they_did_create(self):
+        self.create_user()
+        self.login('testuser', 'python')
+        self.app.get('tasks/tasks/', follow_redirects=True)
+        self.create_task()
+        self.logout()
+        self.register()
+        self.login('someuser', 'python101')
+        self.app.get('tasks/tasks/', follow_redirects=True)
+        response = self.create_task()
+        self.assertIn('tasks/complete/2/', response.data)
+        self.assertIn('tasks/delete/2/', response.data)
+
+    def test_admin_can_see_links_for_all_tasks(self):
+        self.create_user()
+        self.login('testuser', 'python')
+        self.app.get('tasks/tasks/', follow_redirects=True)
+        self.create_task()
+        self.logout()
+        self.create_admin_user()
+        self.login('Superman', 'allpowerful')
+        self.app.get('tasks/tasks/', follow_redirects=True)
+        response = self.create_task()
+        self.assertIn('tasks/complete/1/', response.data)
+        self.assertIn('tasks/delete/1/', response.data)
+        self.assertIn('tasks/complete/2/', response.data)
+        self.assertIn('tasks/delete/2/', response.data)
+
+
 if __name__ == "__main__":
     unittest.main()
