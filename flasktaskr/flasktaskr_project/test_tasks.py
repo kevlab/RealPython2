@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from project import app, db
+from project import app, db, bcrypt
 from config import basedir
 from project.models import User, Task
 
@@ -42,14 +42,14 @@ class Alltests(unittest.TestCase):
     def create_user(self):
         new_user = User(name='testuser',
                         email='testuser@hotmail.com',
-                        password='python')
+                        password=bcrypt.generate_password_hash('python'))
         db.session.add(new_user)
         db.session.commit()
 
     def create_admin_user(self):
         new_user = User(name='Superman',
                         email='admin@hotmail.com',
-                        password='allpowerful',
+                        password=bcrypt.generate_password_hash('allpowerful'),
                         role='admin')
         db.session.add(new_user)
         db.session.commit()
