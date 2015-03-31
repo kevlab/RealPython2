@@ -1,5 +1,5 @@
 from project import app, db
-from flask import flash, redirect, session, url_for
+from flask import flash, redirect, session, url_for, render_template
 from functools import wraps
 
 def login_required(test):
@@ -21,3 +21,7 @@ def flash_errors(form):
 @app.route('/', defaults={'page': 'index'})
 def index(page):
     return redirect(url_for('tasks.tasks'))
+
+@app.errorhandler(404)
+def internal_error(error):
+    return render_template('404.html'), 404
