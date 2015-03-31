@@ -5,6 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 DATABASE = 'flasktaskr.db'
 CSRF_ENABLED = True
 SECRET_KEY = 'insert_key_here'
+DEBUG = True
 
 DATABASE_PATH = os.path.join(basedir, DATABASE)
 
