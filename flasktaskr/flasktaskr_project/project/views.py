@@ -61,3 +61,16 @@ def tasks():
                     'user id': result.user_id}
             json_results.append(data)
     return jsonify(items=json_results)
+
+@app.route('/api/tasks/<int:task_id>', methods=['GET'])
+def task(task_id):
+    if request.method == 'GET':
+        result = db.session.query(Task).filter_by(task_id=task_id).first()
+        json_result = {'task_id': result.task_id,
+                        'task name': result.name,
+                        'due date': str(result.due_date),
+                        'priority': result.priority,
+                        'posted date': str(result.posted_date),
+                        'status': result.status,
+                        'user id': result.user_id}
+    return jsonify(items=json_result)
