@@ -8,7 +8,7 @@ from project.models import Task
 
 TEST_DB = 'test.db'
 
-class MainTests(unittest.TestCase):
+class AllTests(unittest.TestCase):
 
     def setUp(self):
         app.config['TESTING'] = True
@@ -40,7 +40,7 @@ class MainTests(unittest.TestCase):
                             1))
         db.session.commit()
 
-    def test_collection_endpointt_returns_correct_data(self):
+    def test_collection_endpoint_returns_correct_data(self):
         self.add_tasks()
         response = self.app.get('api/tasks/', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
@@ -48,3 +48,5 @@ class MainTests(unittest.TestCase):
         self.assertIn("Run around in circles", response.data)
         self.assertIn("Purchase Real Python", response.data)
 
+if __name__ == "__main__":
+    unittest.main()
