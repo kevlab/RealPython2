@@ -10,3 +10,7 @@
 404 error at 03-04-2015 19:21:22:http://localhost/not-actually-a-route/
 404 error at 03-04-2015 19:23:59:http://localhost/not-actually-a-route/
 500 error at 03-04-2015 19:30:21:http://localhost:5000/api/tasks/2
+404 error at 03-04-2015 19:34:58:http://localhost:5000/api/task/209
+404 error at 03-04-2015 19:35:01:http://localhost:5000/api/task/209
+404 error at 03-04-2015 19:35:10:http://localhost:5000/api/task/1
+404 error at 03-04-2015 19:35:12:http://localhost:5000/api/task/1

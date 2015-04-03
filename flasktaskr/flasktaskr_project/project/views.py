@@ -66,11 +66,15 @@ def tasks():
 def task(task_id):
     if request.method == 'GET':
         result = db.session.query(Task).filter_by(task_id=task_id).first()
-        json_result = {'task_id': result.task_id,
-                        'task name': result.name,
-                        'due date': str(result.due_date),
-                        'priority': result.priority,
-                        'posted date': str(result.posted_date),
-                        'status': result.status,
-                        'user id': result.user_id}
-    return jsonify(items=json_result)
+        if result:
+            json_result = {'task_id': result.task_id,
+                            'task name': result.name,
+                            'due date': str(result.due_date),
+                            'priority': result.priority,
+                            'posted date': str(result.posted_date),
+                            'status': result.status,
+                            'user id': result.user_id}
+            return jsonify(items=json_result)
+        else:
+            result = {"sorry": "Element does not exist"}
+            return jsonify(result)
