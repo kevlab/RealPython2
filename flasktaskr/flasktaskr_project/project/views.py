@@ -1,7 +1,7 @@
 from project import app, db
 from project.models import Task
 from flask import flash, redirect, session, url_for, render_template, request,\
-                  jsonify
+                  jsonify, make_response
 from functools import wraps
 import datetime
 
@@ -74,7 +74,8 @@ def task(task_id):
                             'posted date': str(result.posted_date),
                             'status': result.status,
                             'user id': result.user_id}
-            return jsonify(items=json_result)
+            code = 200
         else:
-            result = {"sorry": "Element does not exist"}
-            return jsonify(result)
+            json_result = {"sorry": "Element does not exist"}
+            code = 404
+    return make_response(jsonify(json_result), code)

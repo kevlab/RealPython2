@@ -59,7 +59,7 @@ class AllTests(unittest.TestCase):
     def test_invalid_resource_endpoint_returns_correct_data(self):
         self.add_tasks()
         response = self.app.get('api/tasks/3', follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
         self.assertEqual(response.mimetype, 'application/json')
         self.assertIn("Element does not exist", response.data)
 
