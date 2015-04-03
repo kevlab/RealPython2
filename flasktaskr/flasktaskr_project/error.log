@@ -2,3 +2,8 @@
 404 error at 02-04-2015 20:04:48:http://localhost/not-actually-a-route/
 404 error at 02-04-2015 20:08:54:http://localhost/not-actually-a-route/
 404 error at 02-04-2015 20:10:40:http://localhost/not-actually-a-route/
+404 error at 03-04-2015 18:50:17:http://localhost/not-actually-a-route/
+404 error at 03-04-2015 19:04:59:http://localhost/api/tasks/
+404 error at 03-04-2015 19:05:00:http://localhost/not-actually-a-route/
+404 error at 03-04-2015 19:05:48:http://localhost/api/tasks/
+404 error at 03-04-2015 19:05:49:http://localhost/not-actually-a-route/
