@@ -4,6 +4,10 @@ from behave import *
 def flask_is_setup(context):
     assert context.client
 
+@given(u'we are not logged in')
+def logout(context):
+    context.page = context.client.get('/logout', follow_redirects=True)
+
 @given(u'we login with "{username}" and "{password}"')
 @when(u'we login with "{username}" and "{password}"')
 def login(context, username, password):
@@ -29,3 +33,7 @@ def add(context, title, text):
                                                  password=text),
                                        follow_redirects=True)
     assert context.page
+
+@then(u'we should see the post with "{title}" and "{text}" as the title and text')
+def entry(context, title, text):
+    assert title and text in context.page.data

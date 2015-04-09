@@ -26,6 +26,7 @@ Feature: flaskr is secure in that users must login and logout to access certain 
     and we login with "admin" and "admin"
       When we add a new entry with "test" and "test" as the title and text
       Then we should see the alert "New entry was successfully posted"
+      Then we should see the post with "test" and "test" as the title and text
 
   Scenario: unsuccessful post
     Given flaskr is setup
