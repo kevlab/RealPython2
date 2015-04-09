@@ -32,4 +32,4 @@ Feature: flaskr is secure in that users must login and logout to access certain 
     Given flaskr is setup
     Given we are not logged in
       When we add a new entry with "test" and "test" as the title and text
-      Then we should see a "401" status code
+      Then we should see the alert "Unauthorized"
