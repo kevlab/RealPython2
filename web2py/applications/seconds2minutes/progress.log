@@ -1,0 +1,8 @@
+[2015-04-10 18:39:52] START
+[2015-04-10 18:41:25] EDIT seconds2minutes/controllers/default.py: -46
+[2015-04-10 18:42:13] EDIT seconds2minutes/controllers/default.py: -2
+[2015-04-10 18:43:15] EDIT seconds2minutes/views/default/index.html: -27
+[2015-04-10 18:43:48] CREATE default/convert.html: 0
+[2015-04-10 18:44:31] EDIT seconds2minutes/views/default/convert.html: 3
+[2015-04-10 18:46:41] EDIT seconds2minutes/controllers/default.py: 0
+[2015-04-10 18:46:50] EDIT seconds2minutes/controllers/default.py: 0
