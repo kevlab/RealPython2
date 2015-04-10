@@ -1,0 +1,4 @@
+[2015-04-10 18:19:50] START
+[2015-04-10 18:22:10] EDIT hello_world/controllers/default.py: -1
+[2015-04-10 18:23:39] EDIT hello_world/views/default/index.html: -23
+[2015-04-10 18:28:27] EDIT hello_world/controllers/default.py: 0
