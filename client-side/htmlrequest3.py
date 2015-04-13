@@ -1,6 +1,6 @@
 import requests
 
-url = 'http//httpbin.org/post'
+url = 'http://httpbin.org/post'
 data = {'fname': 'somename', 'lname': 'somelastname'}
 
 r = requests.post(url, data=data)
