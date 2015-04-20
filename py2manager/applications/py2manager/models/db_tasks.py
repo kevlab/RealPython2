@@ -2,7 +2,7 @@ db.define_table('company',
                 Field('company_name', notnull=True, unique=True),
                 Field('email'),
                 Field('phone', notnull=True),
-                Filed('url'),
+                Field('url'),
                 format='%(company_name)s')
 
 db.company.email.requires = IS_EMAIL()
