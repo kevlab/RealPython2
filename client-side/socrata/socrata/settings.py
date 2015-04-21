@@ -11,5 +11,8 @@ BOT_NAME = 'socrata'
 SPIDER_MODULES = ['socrata.spiders']
 NEWSPIDER_MODULE = 'socrata.spiders'
 
+DOWNLOAD_DELAY = 10
+ITEM_PIPELINES = ['socrata.pipelines.SocrataPipeline']
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'socrata (+http://www.yourdomain.com)'
