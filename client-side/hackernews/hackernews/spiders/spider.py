@@ -17,7 +17,7 @@ class MySpider(BaseSpider):
         items = []
         for title in titles:
             item = HackernewsItem()
-            item["title"] = title.select("a/text()").extract()
+            item["title"] = title.select("a/text()").extract()  # finds all <a> tags within each <td> tag, then extracts the text
             item["url"] = title.select("a/@href").extract()
             items.append(item)
         return items
