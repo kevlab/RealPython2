@@ -1,0 +1,6 @@
+from django.conf.urls import patterns, url
+from hello_world import views
+
+urlpatterns = patterns(
+    'hello_world.views', url(r'^$', views.index, name="index"),
+)
