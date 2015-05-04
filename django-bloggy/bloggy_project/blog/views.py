@@ -4,6 +4,8 @@ from django.template import Context, loader
 
 from blog.models import Post
 
+def encode_url(url):
+    return url.replace(' ', '_')
 
 def index(request):
     latest_posts = Post.objects.all().order_by('-created_at')
@@ -12,9 +14,9 @@ def index(request):
     context_dict = {'latest_posts': latest_posts,
                     'popular_posts': popular_posts}
     for post in latest_posts:
-        post.url = post.title.replace(' ', '_')
+        post.url = encode_url(post.title)
     for popular_post in popular_posts:
-        popular_post.url = popular_post.title.replace(' ', '_')
+        popular_post.url = encode_url(popular_post.title)
     c = Context(context_dict)
     return HttpResponse(t.render(c))
 
