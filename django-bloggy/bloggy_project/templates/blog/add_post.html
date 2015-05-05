@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load bootstrap_tags %}
 <form id="post_form" method="post" action="/blog/add_post/" enctype="multipart/form-data">
   {% csrf_token %}
-  {{form}}
+  {{form | as_bootstrap}}
 <!-- equivalent since we're not adding custom features
      enctype multipart used to allow user to upload files via the form
   {% for hidden in form.hidden_fields %}
@@ -16,6 +17,7 @@
     {{field}}
   {% endfor %}
 -->
-  <input type="submit" name="submit" value="Create Post">
+  <input type="submit" name="submit" value="Create Post" class="btn btn-primary">
 </form>
+<br>
 {% endblock %}
